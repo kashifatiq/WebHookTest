@@ -1,0 +1,2 @@
+1. use grok for creating live url of local IIS site
+2. (download single file) git checkout origin/master -- DailyTaskManager/DailyTaskManager/Program.cs
