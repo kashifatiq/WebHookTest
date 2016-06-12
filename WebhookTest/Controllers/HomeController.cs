@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using WebhookTest.Helpers;
 namespace WebhookTest.Controllers
 {
     public class HomeController : Controller
@@ -11,6 +12,18 @@ namespace WebhookTest.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public void TestJson()
+        {
+            JsonHandler jHandler = new JsonHandler();
+            string fileNamePath = Server.MapPath("../Data/SampleGitResponse.json");
+            List<string> lstPushedFiles = new List<string>();
+            using (StreamReader r = new StreamReader(fileNamePath))
+            {
+                lstPushedFiles = jHandler.GetDesirePushedFiles(r.ReadToEnd());
+            }
+            
         }
 
         [HttpPost]
