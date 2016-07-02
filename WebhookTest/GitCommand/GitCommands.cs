@@ -13,12 +13,11 @@ namespace WebhookTest.GitCommand
         {
             string output = string.Empty;
             string error = string.Empty;
-            string _fileName = Path.GetFileName(AppSettings.gitpullcommandPath);
-            string _folderPath = AppSettings.gitpullcommandPath.Replace(_fileName,"");
+            
 
             ProcessStartInfo psi = new ProcessStartInfo();
-            psi.WorkingDirectory = _folderPath;
-            psi.FileName = @"D:\Projects\WebhookTest\WebhookTest\bin\"+ _fileName;
+            psi.WorkingDirectory = AppSettings.repoToPullFolerPath;
+            psi.FileName = AppSettings.gitpullcommandPath;
             psi.RedirectStandardError = true;
             psi.RedirectStandardOutput = true;
             psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
