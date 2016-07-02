@@ -11,6 +11,7 @@ namespace WebhookTest.Controllers
     {
         public ActionResult Index()
         {
+            GitCommand.GitCommands.GitPull();
             //TestJson();
             return View();
         }
@@ -35,7 +36,7 @@ namespace WebhookTest.Controllers
             {
                 json = inputStream.ReadToEnd();
             }
-            return Json(new {message = "kashif",jsonData = json});
+            return Json(new {message = "OK",jsonData = json});
         }
     }
 }

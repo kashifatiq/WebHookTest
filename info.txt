@@ -1,2 +1,8 @@
 1. use grok for creating live url of local IIS site
 2. (download single file) git checkout origin/master -- DailyTaskManager/DailyTaskManager/Program.cs
+
+
+1. create a webhook in github and pass it a live url to sent any push information
+2. in that url catch git json data and fetch information about pushed files
+3. run pull on temp repo so that all the changes are updated in that repo
+4. copy pushed files (retreived from json) to history folder through c# application
