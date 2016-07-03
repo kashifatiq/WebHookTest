@@ -17,6 +17,11 @@ namespace WebhookTest.Helpers
         /// </summary>
         public static string repoToPullFolerPath { get { return readWebConfig("repoToPullFolerPath"); } }
 
+        /// <summary>
+        /// folder path where files will copied and pushed to repo
+        /// </summary>
+        public static string BackupFolderPath { get { return readWebConfig("BackupFolderPath"); } }
+
         private static string readWebConfig(string key)
         {
             var value = System.Configuration.ConfigurationManager.AppSettings[key];

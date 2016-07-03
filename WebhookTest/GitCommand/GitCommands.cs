@@ -9,31 +9,40 @@ namespace WebhookTest.GitCommand
 {
     public class GitCommands
     {
-        public static object GitPull()
+        public static GitCommandsHelper.GitCommandResult GitPull()
         {
-            string output = string.Empty;
-            string error = string.Empty;
-            
-
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.WorkingDirectory = AppSettings.repoToPullFolerPath;
-            psi.FileName = AppSettings.gitpullcommandPath;
-            psi.RedirectStandardError = true;
-            psi.RedirectStandardOutput = true;
-            psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-            psi.UseShellExecute = false;
-            System.Diagnostics.Process reg;
-            reg = System.Diagnostics.Process.Start(psi);
-
-            using (System.IO.StreamReader myOutput = reg.StandardOutput)
+            GitCommandsHelper.GitCommandResult _gitResults = new GitCommandsHelper.GitCommandResult();
+            try
             {
-                output = myOutput.ReadToEnd();
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.WorkingDirectory = AppSettings.repoToPullFolerPath;
+                psi.FileName = AppSettings.gitpullcommandPath;
+                psi.RedirectStandardError = true;
+                psi.RedirectStandardOutput = true;
+                psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                psi.UseShellExecute = false;
+                System.Diagnostics.Process reg;
+                reg = System.Diagnostics.Process.Start(psi);
+
+                using (System.IO.StreamReader myOutput = reg.StandardOutput)
+                {
+                    //TODO read this output for better logging of whats downloaded
+                    _gitResults.OutPut = myOutput.ReadToEnd();
+                }
+                using (System.IO.StreamReader error = reg.StandardError)
+                {
+                    //TODO handle any errors from git command which are not exceptions
+                    _gitResults.Error = error.ReadToEnd();
+                }
+
+                _gitResults.isSuccessfull = true;
+                return _gitResults;
             }
-            using (System.IO.StreamReader myError = reg.StandardError)
+            catch(Exception)
             {
-                error = myError.ReadToEnd();
+                _gitResults.isSuccessfull = false;
+                return _gitResults;
             }
-            return null;
         }
     }
 }
