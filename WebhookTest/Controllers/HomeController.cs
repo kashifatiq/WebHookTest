@@ -30,6 +30,7 @@ namespace WebhookTest.Controllers
                 if (lstPushedFiles.Count > 0)
                 {
                     CopyFilesToBackupFolder(lstPushedFiles);
+                    GitCommandsHelper.GitCommandResult _gitResult = GitCommand.GitCommands.GitPush(); // run git push to push all updates from backup folder
                 }
             }
             catch(Exception)

@@ -44,5 +44,21 @@ namespace WebhookTest.GitCommand
                 return _gitResults;
             }
         }
+
+        public static GitCommandsHelper.GitCommandResult GitPush()
+        {
+            GitCommandsHelper.GitCommandResult _gitResults = new GitCommandsHelper.GitCommandResult();
+            try
+            {
+
+                return _gitResults;
+            }
+            catch (Exception)
+            {
+                _gitResults.isSuccessfull = false;
+                return _gitResults;
+                //TODO log error
+            }
+        }
     }
 }
