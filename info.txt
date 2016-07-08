@@ -8,13 +8,12 @@ IF we want to trigger process only on any push
 	1. create a webhook in github and pass it a live url to sent any push information
 	2. in that url catch git json data and fetch information about pushed files
 	3. run pull on temp repo so that all the changes are updated in that repo
+		3.a.	pull whole repo by running GITPULL.bat from code folder to actual repo folder
+
 	4. copy pushed files (retreived from json) to history folder through c# application
-
-
-
-	3.a.	pull whole repo by running GITPULL.bat from code folder to actual repo folder
-	4.a.	copy new/updated/deleted files from json into specific folder (history)
-	4.b.	now push these new files copied into history folder to repo
+		(to save repo user name/password for push run [git config --global credential.helper wincred] in git bash https://help.github.com/articles/caching-your-github-password-in-git/#)
+		4.a.	copy new/updated/deleted files from json into specific folder (history)
+		4.b.	now push these new files copied into history folder to repo
 }
 
 if we want to trigger process on given time interval

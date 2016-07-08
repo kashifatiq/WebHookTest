@@ -31,7 +31,9 @@
 		"DailyTaskManager/DailyTaskManager/History/spHistory.sql"],
 		"removed": [],
 		"modified": ["DailyTaskManager/DailyTaskManager/Program.cs",
-		"DailyTaskManager/DailyTaskManager/frmTasksList.cs"]
+            "DailyTaskManager/DailyTaskManager/frmTasksList.cs",
+            "DailyTaskManager/BO/6.4/sp64.sql"
+		]
 	}],
 	"head_commit": {
 		"id": "6c1bb01572bfb9cb8b3e376153d3cc21fc7ce4a5",

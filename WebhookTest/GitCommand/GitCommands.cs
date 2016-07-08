@@ -11,12 +11,17 @@ namespace WebhookTest.GitCommand
     {
         public static GitCommandsHelper.GitCommandResult GitPull()
         {
+            return CommandRunner(AppSettings.gitpullcommandPath);
+        }
+
+        private static GitCommandsHelper.GitCommandResult CommandRunner(string _commandFileName)
+        {
             GitCommandsHelper.GitCommandResult _gitResults = new GitCommandsHelper.GitCommandResult();
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.WorkingDirectory = AppSettings.repoToPullFolerPath;
-                psi.FileName = AppSettings.gitpullcommandPath;
+                psi.FileName = _commandFileName;
                 psi.RedirectStandardError = true;
                 psi.RedirectStandardOutput = true;
                 psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
@@ -38,27 +43,18 @@ namespace WebhookTest.GitCommand
                 _gitResults.isSuccessfull = true;
                 return _gitResults;
             }
-            catch(Exception)
+            catch (Exception ex)
             {
+                //TODO log error
                 _gitResults.isSuccessfull = false;
+                _gitResults.Error = ex.Message;
                 return _gitResults;
             }
         }
 
         public static GitCommandsHelper.GitCommandResult GitPush()
         {
-            GitCommandsHelper.GitCommandResult _gitResults = new GitCommandsHelper.GitCommandResult();
-            try
-            {
-
-                return _gitResults;
-            }
-            catch (Exception)
-            {
-                _gitResults.isSuccessfull = false;
-                return _gitResults;
-                //TODO log error
-            }
+            return CommandRunner(AppSettings.gitpushcommandPath);
         }
     }
 }
