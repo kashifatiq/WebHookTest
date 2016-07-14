@@ -1,1 +1,0 @@
-git --git-dir=D:/Projects/GitTest/.git log
