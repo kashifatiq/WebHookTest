@@ -12,30 +12,62 @@ namespace WebhookTest.Controllers
         public ActionResult Index()
         {
             //GitCommand.GitCommands.GitPull();
-            TestJson();
+            //TestJson();
             return View();
         }
 
+        /// <summary>
+        /// test pull->copy files->push (not from live hit but from hard coded json string)
+        /// </summary>
         public void TestJson()
         {
             try
             {
-                JsonHandler jHandler = new JsonHandler();
                 string fileNamePath = Server.MapPath("~/Data/SampleGitResponse.json");
                 List<string> lstPushedFiles = new List<string>();
-                using (StreamReader r = new StreamReader(fileNamePath))
-                {
-                    lstPushedFiles = jHandler.GetDesirePushedFiles(r.ReadToEnd());
-                }
-                if (lstPushedFiles.Count > 0)
-                {
-                    CopyFilesToBackupFolder(lstPushedFiles);
-                    GitCommandsHelper.GitCommandResult _gitResult = GitCommand.GitCommands.GitPush(); // run git push to push all updates from backup folder
-                }
+                StreamReader r = new StreamReader(fileNamePath);
+                PullCopyPush(r.ReadToEnd());
             }
             catch(Exception)
             {
                 //TODO log error here
+            }
+        }
+
+        /// <summary>
+        /// filter out desired files from json string, pull whole repo, copy desired files to hostory folder, push history folder into repo
+        /// </summary>
+        /// <param name="jSonString"></param>
+        private void PullCopyPush(string jSonString)
+        {
+            List<string> PushedFiles = new List<string>();
+            JsonHandler jHandler = new JsonHandler();
+            PushedFiles = jHandler.GetDesirePushedFiles(jSonString);
+            if (PushedFiles.Count > 0)
+            {
+                // run git pull to download all files
+                // all the errors and files download logs will be handeld in function itself
+                GitCommandsHelper.GitCommandResult _gitPullResult = GitCommand.GitCommands.GitPull();
+                if (_gitPullResult.isSuccessfull)
+                {
+                    CopyFilesToBackupFolder(PushedFiles);
+
+                    // run it push to push 
+                    // all the errors and files download logs will be handeld in function itself
+                    GitCommandsHelper.GitCommandResult _gitGitPushResult = GitCommand.GitCommands.GitPush(); // run git push to push all updates from backup folder
+                    if(_gitGitPushResult.isSuccessfull)
+                    {
+                        //TODO log process completed
+                    }
+                    else
+                    {
+                        //TODO log push error
+                    }
+                }
+                else
+                {
+                    //TODO log that we are not pushing anything becouse pull is failed 
+                }
             }
         }
 
@@ -43,43 +75,40 @@ namespace WebhookTest.Controllers
         {
             try
             {
-                GitCommandsHelper.GitCommandResult _gitResult = GitCommand.GitCommands.GitPull(); // run git pull to download all files
                 string _repoToPullFolerPath = AppSettings.repoToPullFolerPath;
-                if (_gitResult.isSuccessfull == true)
+                string _destinationPath = string.Empty;
+                foreach (string fileToBackup in lstPushedFiles)
                 {
-                    #region copy desired files to pre-defined forlder
-                    string _destinationPath = string.Empty;
-                    foreach (string fileToBackup in lstPushedFiles)
+                    string _fileName = Path.GetFileName(fileToBackup);
+                    _destinationPath = Path.Combine(AppSettings.BackupFolderPath, _fileName);
+                    try
                     {
-                        string _fileName = Path.GetFileName(fileToBackup);
-                        _destinationPath = Path.Combine(AppSettings.BackupFolderPath, _fileName);
-                        try
-                        {
-                            System.IO.File.Copy(Path.Combine(_repoToPullFolerPath, fileToBackup), _destinationPath, true);
-                        }
-                        catch (Exception)
-                        {
-                            //TODO log error here
-                        }
+                        System.IO.File.Copy(Path.Combine(_repoToPullFolerPath, fileToBackup), _destinationPath, true);
                     }
-                    #endregion
+                    catch (Exception)
+                    {
+                        //TODO log error here
+                    }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 //TODO log error here
             }
         }
 
+        /// <summary>
+        /// actual method that will be hit by git if anyone pushes something in repo
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Webhook()
         {
-            var json = "";
-            using (var inputStream = new System.IO.StreamReader(Request.InputStream))
-            {
-                json = inputStream.ReadToEnd();
-            }
-            return Json(new {message = "OK",jsonData = json});
+            string json = "";
+            var inputStream = new System.IO.StreamReader(Request.InputStream);
+            json = inputStream.ReadToEnd();
+            PullCopyPush(json);
+            return Json(new { message = "OK", jsonData = json });
         }
     }
 }
