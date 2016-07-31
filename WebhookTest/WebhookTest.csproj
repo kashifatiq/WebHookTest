@@ -165,6 +165,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AppSettings.cs" />
+    <Compile Include="Helpers\Constansts.cs" />
     <Compile Include="Helpers\GitCommandsHelper.cs" />
     <Compile Include="Helpers\JsonHandler.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -219,7 +220,12 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\Lockout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EventLogs\EventLogs.csproj">
+      <Project>{cd29789b-3704-46ae-8aab-bc2f1e48b837}</Project>
+      <Name>EventLogs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

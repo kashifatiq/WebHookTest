@@ -1,13 +1,30 @@
-﻿@{
+﻿@model WebhookTest.Models.IndexViewModel
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+    @*<h3>Git history manager</h3>*@
+    <p class="lead">App Settings</p>
 
+    @foreach (var obj in Model.dicProperties)
+    {
+        <div class="row">
+            <div class="col-md-2" style="font-size:small">
+                @obj.Key
+            </div>
+            <div class="col-md-10" style="font-size:small">
+              @if(@obj.Value == "")
+              {
+                 <label style="color:red;">@WebhookTest.Helpers.Constansts.emptyProperty </label>
+              }
+              else
+              {  @obj.Value}
+            </div>
+        </div>
+    }
+</div>
+<!--
 <div class="row">
     <div class="col-md-4">
         <h2>Getting started</h2>
@@ -29,3 +46,4 @@
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+    -->
